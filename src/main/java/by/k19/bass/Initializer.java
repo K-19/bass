@@ -3,6 +3,9 @@ package by.k19.bass;
 import by.k19.bass.model.Event;
 import by.k19.bass.model.Group;
 import by.k19.bass.model.GroupRepository;
+import by.k19.bass.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +15,7 @@ import java.util.stream.Stream;
 
 @Component
 class Initializer implements CommandLineRunner {
+    static Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     private final GroupRepository repository;
 
@@ -21,19 +25,13 @@ class Initializer implements CommandLineRunner {
 
     @Override
     public void run(String... strings) {
-        Stream.of("Seattle JUG", "Denver JUG", "Dublin JUG",
-                "London JUG").forEach(name ->
-                repository.save(new Group(name))
-        );
+        User user = User.builder().
+                name("Sergey").
+                email("sergeifilinovich01@gmail.com").
+                phone("+375292784340").
+                build();
+        logger.debug("Объект создан: " + user);
 
-        Group djug = repository.findByName("Seattle JUG");
-        Event e = Event.builder().title("Micro Frontends for Java Developers")
-                .description("JHipster now has microfrontend support!")
-                .date(Instant.parse("2022-09-13T17:00:00.000Z"))
-                .build();
-        djug.setEvents(Collections.singleton(e));
-        repository.save(djug);
-
-        repository.findAll().forEach(System.out::println);
+        logger.debug("WHAT?");
     }
 }
